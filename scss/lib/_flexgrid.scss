@@ -1,0 +1,197 @@
+//
+// FLEXBOX MIXINS
+//
+// Here are Art Deco's internal mixins for using Flexbox with support for
+// IE10 (which uses an older, vendor-prefixed draft of the spec).
+// Mixins are added as needed, so if you don't see a mixin for
+// the Flexbox-related property you want to use, create one.
+//
+// Resources:
+// - Flexbox Guide: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+// - Flexbox in IE10: https://msdn.microsoft.com/en-us/library/hh673531(v=vs.85).aspx
+// - Mixin Inspiration: https://github.com/mastastealth/sass-flex-mixin
+
+
+$CONFIG_GRID_MAX_COLUMNS: 24;
+$CONFIG_GRID_GUTTER: 6px;
+$CONFIG_GRID_SPACING: 6px;
+$CONFIG_FLEXGRID_LARGE_BREAKPOINT: 1200px;
+$CONFIG_FLEXGRID_SMALL_BREAKPOINT: 680px;
+
+@mixin -display-flex() {
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@mixin -flex-wrap($value) {
+  -ms-flex-wrap: $value;
+  flex-wrap: $value;
+}
+
+// This is the flexible grid framework
+// @author    Adam Miller
+// @category  flex-grid
+
+// Breakpoint mixin for setting grid breakpoints
+// @mixin     breakpoint
+// @param     $point {String} the name of desired breakpoint: papa-bear, mama-bear, baby-bear
+@mixin breakpoint($point) {
+  @if $point == papa-bear {
+    @media (min-width: $CONFIG_FLEXGRID_LARGE_BREAKPOINT) { @content; }
+  }
+  @else if $point == mama-bear {
+    @media (max-width: $CONFIG_FLEXGRID_LARGE_BREAKPOINT) and (min-width: $CONFIG_FLEXGRID_SMALL_BREAKPOINT) { @content; }
+  }
+  @else if $point == baby-bear {
+    @media (max-width: $CONFIG_FLEXGRID_SMALL_BREAKPOINT)  { @content; }
+  }
+}
+
+// Convenience method for creating a flex grid canvas
+// @mixin     flex-canvas
+@mixin flex-canvas() {
+  display: block;
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: $CONFIG_FLEXGRID_LARGE_BREAKPOINT;
+  @extend %clearfix;
+  border: 0px solid transparent;
+  @include breakpoint(mama-bear){
+    border-width: 0 15px;
+  };
+  @include breakpoint(baby-bear){
+    border-width: 0 10px;
+  };
+}
+
+// Utility function returns horizontal values from css <top> <right> <bottom> <left> format and all it's shorthand forms
+// @function  horizontal-values
+// @param     $list {List} The list of css <top> <right> <bottom> <left> values, or any shorthand variation
+// @returns   $result {List} List in the form of <left> <right>
+@function flex-horizontal-values($list){
+  @if(length($list) == 1){
+    @return ($list $list);
+  }
+  @if(length($list) == 2 or length($list) == 3){
+    @return (nth($list, 2), nth($list, 2));
+  }
+  @if(length($list) == 4){
+    @return (nth($list, 4), nth($list, 2));
+  }
+}
+
+// Utility function returns vertical values from css <top> <right> <bottom> <left> format and all it's shorthand forms
+// @function  vertical-values
+// @param     $list {List} The list of css <top> <right> <bottom> <left> values, or any shorthand variation
+// @returns   $result {List} List in the form of <top> <bottom>
+@function flex-vertical-values($list){
+  @if(length($list) == 1){
+    @return ($list $list);
+  }
+  @if(length($list) == 2){
+    @return (nth($list, 1), nth($list, 1));
+  }
+  @if(length($list) == 3 or length($list) == 4){
+    @return (nth($list, 1), nth($list, 3));
+  }
+}
+
+// Utility function multiplies every value in a list with $mult
+// @function  list-multiply
+// @param     $list {List} The list of css <top> <right> <bottom> <left> values, or any shorthand variation
+// @returns   $mult {Number} The value to multiply the list by
+@function list-multiply($list, $mult){
+  $newList: ();
+  @each $item in $list {
+    $newList: append($newList, ($item * $mult));
+  }
+  @return $newList;
+}
+
+// The main flex-grid mixin
+// @mixin     flex-grid
+// @param     $columns {Number} the number of columns to span
+// @param     $preserve {Bool} if true, grid element will retain width and offset in baby-bear, otherwise will go full width
+// @param     $margin {List} grid margin ratios in the form <top> <right> <bottom> <left> or any shorthand variation
+// @param     $padding {List} grid padding ratios in the form <top> <right> <bottom> <left> or any shorthand variation
+// @param     $offset {Number} the number of grid columns offset from the left
+// @param     $push {Number} number of columns pushed to the right. value is 0 in baby-bear. used for element reordering
+// @param     $pull {Number} number of columns pulled to the left. value is 0 in baby-bear. used for element reordering
+@mixin flex-grid($columns, $preserve: false, $margin: none, $padding: none, $offset: 0, $push: false, $pull: false) {
+
+  $COLUMN_WIDTH : 100%/$CONFIG_GRID_MAX_COLUMNS;
+
+  // Base Styles
+  float: left;
+
+  // Box Sizing Border-Box Works IE8+
+  box-sizing: border-box;
+
+  // Set Grid Margins
+  $horizontalMargins: 0;
+  $leftMargin: 0;
+  @if($margin != none){
+    $leftMargin: nth(flex-horizontal-values($margin), 1);
+    $rightMargin: nth(flex-horizontal-values($margin), 2);
+    $topMargin: nth(flex-vertical-values($margin), 1);
+    $bottomMargin: nth(flex-vertical-values($margin), 2);
+    $horizontalMargins: $leftMargin + $rightMargin;
+    @if($leftMargin != 0){
+      margin-left: $leftMargin * $CONFIG_GRID_GUTTER;
+    }
+    @if($rightMargin != 0){
+      margin-right: $rightMargin * $CONFIG_GRID_GUTTER;
+    }
+    @if($topMargin != 0){
+      margin-top: $topMargin * $CONFIG_GRID_GUTTER;
+    }
+    @if($bottomMargin != 0){
+      margin-bottom: $bottomMargin * $CONFIG_GRID_GUTTER;
+    }
+  }
+
+  // Set Grid Padding
+  @if($padding != none){
+    padding: list-multiply($padding, $CONFIG_GRID_SPACING);
+  }
+
+  // Set Grid Offset
+  @if($offset > 0){
+    @if($leftMargin == 0){
+      margin-left: #{$offset * $COLUMN_WIDTH};
+    }
+    @else{
+      margin-left: calc(#{$offset * $COLUMN_WIDTH} + #{$leftMargin * $CONFIG_GRID_GUTTER});
+    }
+  }
+
+  // Set Push and Pull
+  @if($push){
+    left: $COLUMN_WIDTH*$push;
+  }@else if($pull){
+    right: $COLUMN_WIDTH*$pull;
+  }
+
+  // Set Grid Column Width
+  @if($horizontalMargins == 0){
+    width: #{$COLUMN_WIDTH*$columns};
+  }
+  @else{
+    width: calc(#{$COLUMN_WIDTH*$columns} - #{$horizontalMargins * $CONFIG_GRID_GUTTER});
+  }
+
+  // Baby-bear Grid Element Sizing and Positioning
+  @include breakpoint(baby-bear){
+    // Reset Push and Pull
+    left: 0;
+    right: 0;
+    // If Sizing Not Preserved, Go Full Width and Remove Offset
+    @if($preserve == false){
+      &:not(.preserve){
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+}

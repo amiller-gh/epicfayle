@@ -1,0 +1,50 @@
+@import "../../scss/lib";
+@import "../../scss/reset";
+
+@for $i from 1 through 23 {
+  .grid-#{$i}-first{
+    @include flex-grid($i, $margin: 0 1 0 0);
+  }
+  .grid-#{$i}{
+    @include flex-grid($i, $margin: 0 1 0);
+  }
+  .grid-#{$i}-last{
+    @include flex-grid($i, $margin: 0 0 0 1);
+  }
+}
+
+.grid-24{
+  @include flex-grid(24);
+}
+
+body {
+  font-family: "Merriweather Sans", serif;
+  margin: 0;
+  margin-top: 45px;
+  min-height: 100%;
+
+}
+
+trev-chrome{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background-color: white;
+  box-shadow: 0 0 3px rgba(0,0,0,.25);
+
+  ul {
+    @include flex-canvas();
+
+    li {
+      list-style: none;
+      float: left;
+      a {
+        line-height: 45px;
+        margin-right: 30px;
+      }
+    }
+  }
+
+}

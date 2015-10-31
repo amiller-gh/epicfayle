@@ -1,0 +1,28 @@
+@import "./lib/flexgrid";
+
+%clearfix {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+%noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+%sr-only {
+  color: transparent;
+  font-size: 0;
+  text-indent: -999px;
+}
+

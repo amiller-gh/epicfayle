@@ -36,7 +36,7 @@ gulp.task('default', ['build'], function () {
     server.run(['app.js'], null, 35730);
 
     gulp.watch(['index.html'], ['index', server.notify]);
-    gulp.watch(['apps/**/*.scss'], ['sass', server.notify]);
+    gulp.watch(['apps/**/*.scss', 'scss/**/*.scss'], ['sass', server.notify]);
     gulp.watch(['apps/**/*.html'], ['rebound', server.notify]);
 
     // Restart the server when file changes
