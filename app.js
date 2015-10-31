@@ -113,6 +113,14 @@
   //   next();
   // });
 
+
+// Setup our app to use gallery middleware - also does init
+  app.use('/_photos', require('node-gallery')({
+    staticFiles : 'dist/assets/photos',
+    urlRoot : 'assets/photos',
+    title : 'Trevor Fayle Images',
+  }));
+
 // Get Ghost Config
   ghost({
     config: path.join(__dirname, 'ghost/config.js')
@@ -122,7 +130,7 @@
         ghostServer.start();
 
       // Enable Uploads
-        app.use(multer({ dest: './dist/tmp/uploads/' }));
+        app.use(multer({ dest: './tmp/uploads/' }));
 
       // Automatically discover API in /api. Must be last middleware.
         app.use(api(express));

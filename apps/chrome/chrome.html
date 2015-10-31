@@ -2,8 +2,10 @@
   <template>
     <style></style>
     <ul>
-      <li><a href="/">Trevor Fayle</a></li>
-      <li><a href="//www.trevorfayle.com/blog">Blog</a></li>
+      <li><a href="/index">Trevor Fayle</a></li>
+      <li><a href="//{{location}}/blog">Blog</a></li>
+      <li><a href="/photos">Photos</a></li>
+
     </ul>
   </template>
   <script>
@@ -13,6 +15,9 @@
       },
       index: function(){
         return 1;
+      },
+      get location(){
+        return window.location.host;
       }
     }
   </script>

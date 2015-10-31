@@ -1,0 +1,26 @@
+<element name="photo-gallery">
+  <template>
+    <style></style>
+    <h1>Image Gallery</h1>
+    {{#each photos as |photo|}}
+      <figure class="grid-6">
+        <img src={{photo.src}} alt="photo.name">
+      </figure>
+    {{/each}}
+  </template>
+  <script>
+    return {
+      url: '/_photos',
+      routes: {
+        'photos': 'photos'
+      },
+      photos: function(){
+        this.fetch({
+          headers: {
+            'accept': 'application/json'
+          }
+        });
+      }
+    }
+  </script>
+</element>
