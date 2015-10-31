@@ -33,7 +33,7 @@ gulp.task('build', ['rebound', 'sass', 'index'], function () {});
 gulp.task('default', ['build'], function () {
 
     // Start the server at the beginning of the task
-    server.run(['app.js'], null, {number: 35730});
+    server.run(['app.js'], null, 35730);
 
     gulp.watch(['index.html'], ['index', server.notify]);
     gulp.watch(['apps/**/*.scss'], ['sass', server.notify]);

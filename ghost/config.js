@@ -12,7 +12,7 @@ config = {
     // When running Ghost in the wild, use the production environment.
     // Configure your URL and mail settings here
     production: {
-        url: '//trevorfayle.com/blog',
+        url: 'http://www.trevorfayle.com/blog',
         mail: {},
         database: {
             client: 'sqlite3',
@@ -24,7 +24,7 @@ config = {
 
         server: {
             host: '127.0.0.1',
-            port: '2370'
+            port: '2375'
         }
     },
 
@@ -64,7 +64,7 @@ config = {
             // Host to be passed to node's `net.Server#listen()`
             host: '127.0.0.1',
             // Port to be passed to node's `net.Server#listen()`, for iisnode set this to `process.env.PORT`
-            port: '2370'
+            port: '2375'
         },
         // #### Paths
         // Specify where your content directory lives
@@ -79,7 +79,7 @@ config = {
     // Used when developing Ghost to run tests and check the health of Ghost
     // Uses a different port number
     testing: {
-        url: 'http://127.0.0.1:2370',
+        url: 'http://127.0.0.1:2375',
         database: {
             client: 'sqlite3',
             connection: {
@@ -88,7 +88,7 @@ config = {
         },
         server: {
             host: '127.0.0.1',
-            port: '2369'
+            port: '2375'
         },
         logging: false
     },
@@ -96,7 +96,7 @@ config = {
     // ### Testing MySQL
     // Used by Travis - Automated testing run through GitHub
     'testing-mysql': {
-        url: 'http://127.0.0.1:2369',
+        url: 'http://127.0.0.1:2375',
         database: {
             client: 'mysql',
             connection: {
@@ -117,7 +117,7 @@ config = {
     // ### Testing pg
     // Used by Travis - Automated testing run through GitHub
     'testing-pg': {
-        url: 'http://127.0.0.1:2369',
+        url: 'http://127.0.0.1:2375',
         database: {
             client: 'pg',
             connection: {
@@ -130,7 +130,7 @@ config = {
         },
         server: {
             host: '127.0.0.1',
-            port: '2369'
+            port: '2375'
         },
         logging: false
     }
