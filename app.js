@@ -58,7 +58,7 @@
     fontSrc: ["'self'", 'fonts.gstatic.com'],
     objectSrc: ["'self'"],
     mediaSrc: ["'self'"],
-    frameSrc: ["'self'", 'groups.google.com'],
+    frameSrc: ["'self'", 'groups.google.com', 'ytchannelembed.com'],
     reportUri: '/put-xss-logging-uri-here',
     reportOnly: false, // set to true if you only want to report errors
     setAllHeaders: true, // set to true if you want to set all headers
