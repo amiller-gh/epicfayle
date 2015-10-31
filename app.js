@@ -22,6 +22,8 @@
   var path            = require('path');
   var api             = require('rebound-api');
   var favicon         = require('serve-favicon');
+  var ghost           = require('ghost');
+
 
 // Session Manageent
   var session         = require('express-session');
@@ -76,7 +78,6 @@
 
 // Set Static Content Locations
   app.use(express.static(path.join(__dirname, 'dist')));
-  app.use(multer({ dest: './dist/tmp/uploads/' }));
 
 // Initiate Sessions.
   app.use(session({
@@ -101,19 +102,32 @@
 //   });
 //
 // // Set our csrf cookie for the session on first load
-//   app.use(function(req, res, next){
-//     // Create a csrf token for this session, or use the existing one
-//     req.session.csrf || (req.session.csrf = req.csrfToken());
-//     // Save it in a cookie. Browser sends this in the x-csrf-token header.
-//     res.cookie('csrf', req.session.csrf, {
-//       maxAge: (1000 * 10),
-//       signed: false
-//     });
-//     next();
-//   });
+  // app.use(function(req, res, next){
+  //   // Create a csrf token for this session, or use the existing one
+  //   req.session.csrf || (req.session.csrf = req.csrfToken());
+  //   // Save it in a cookie. Browser sends this in the x-csrf-token header.
+  //   res.cookie('csrf', req.session.csrf, {
+  //     maxAge: (1000 * 10),
+  //     signed: false
+  //   });
+  //   next();
+  // });
 
-// Automatically discover API in /api. Must be last middleware.
-  app.use(api(express));
+// Get Ghost Config
+  ghost({
+    config: path.join(__dirname, 'ghost/config.js')
+  }).then(function (ghostServer) {
+      // Start the ghost server
+        app.use(ghostServer.config._config.paths.subdir, ghostServer.rootApp);
+        ghostServer.start();
+
+      // Enable Uploads
+        app.use(multer({ dest: './dist/tmp/uploads/' }));
+
+      // Automatically discover API in /api. Must be last middleware.
+        app.use(api(express));
+  });
+
 
 // Start Server
   http.createServer(app).listen(app.get('port'), function(){
