@@ -51,14 +51,14 @@
   app.use(helmet.xssFilter()); // ie9+ and chrome xss busting
   app.use(helmet.csp({
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
-    styleSrc: ["'self'", "'unsafe-inline'"],
+    scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'code.jquery.com'],
+    styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
     imgSrc: ["'self'", 'data:'],
     connectSrc: ["'self'"],
-    fontSrc: ["'self'"],
+    fontSrc: ["'self'", 'fonts.gstatic.com'],
     objectSrc: ["'self'"],
     mediaSrc: ["'self'"],
-    frameSrc: ["'self'"],
+    frameSrc: ["'self'", 'groups.google.com'],
     reportUri: '/put-xss-logging-uri-here',
     reportOnly: false, // set to true if you only want to report errors
     setAllHeaders: true, // set to true if you want to set all headers
